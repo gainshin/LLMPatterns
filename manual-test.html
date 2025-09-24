@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手動測試指南</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-item {
+            background: #f8f9fa;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .test-steps {
+            background: #e9ecef;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .expected {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .link-button {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin: 10px 10px 10px 0;
+        }
+        .link-button:hover {
+            background: #0056b3;
+        }
+        h1 { color: #2c3e50; }
+        h2 { color: #34495e; border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 AI 法規領航員 - 手動測試指南</h1>
+        
+        <p><strong>目的：</strong>驗證所有互動功能是否正常工作，包括按鈕點擊、搜尋功能和設計要點面板。</p>
+        
+        <div style="text-align: center; margin: 20px 0;">
+            <a href="/" class="link-button">🚀 開始測試主應用程式</a>
+            <a href="/interact-test.html" class="link-button">🔧 開啟除錯測試頁面</a>
+        </div>
+        
+        <h2>📋 測試清單</h2>
+        
+        <div class="test-item">
+            <h3>1. 基本頁面載入測試</h3>
+            <div class="test-steps">
+                <strong>步驟：</strong><br>
+                1. 開啟主應用程式 (<a href="/">點擊這裡</a>)<br>
+                2. 開啟瀏覽器開發者工具 (F12)<br>
+                3. 查看 Console 標籤
+            </div>
+            <div class="expected">
+                <strong>預期結果：</strong><br>
+                • 看到 "DOM Content Loaded, initializing navigator"<br>
+                • 看到 "Navigator initialized: AIRegulationNavigator"<br>
+                • 看到 "Found 3 mode buttons" 等綁定訊息<br>
+                • 沒有 JavaScript 錯誤（除了 favicon 404）
+            </div>
+        </div>
+        
+        <div class="test-item">
+            <h3>2. 模式切換測試</h3>
+            <div class="test-steps">
+                <strong>步驟：</strong><br>
+                1. 點擊 "混合式智慧搜尋" 按鈕<br>
+                2. 點擊 "對話式法規諮詢" 按鈕<br>
+                3. 點擊 "傳統關鍵詞搜尋" 按鈕
+            </div>
+            <div class="expected">
+                <strong>預期結果：</strong><br>
+                • 每次點擊都會切換到相應的搜尋界面<br>
+                • Console 中會顯示 "Mode button clicked: [模式名稱]"<br>
+                • 按鈕高亮狀態會正確切換<br>
+                • 搜尋界面內容會相應改變
+            </div>
+        </div>
+        
+        <div class="test-item">
+            <h3>3. 搜尋功能測試</h3>
+            <div class="test-steps">
+                <strong>步驟：</strong><br>
+                1. 在 "傳統關鍵詞搜尋" 模式下，點擊搜尋按鈕<br>
+                2. 切換到 "混合式智慧搜尋"，點擊搜尋按鈕<br>
+                3. 切換到 "對話式法規諮詢"，點擊搜尋按鈕<br>
+                4. 嘗試在搜尋框中按 Enter 鍵
+            </div>
+            <div class="expected">
+                <strong>預期結果：</strong><br>
+                • 每次搜尋都會生成相應的結果<br>
+                • Console 中會顯示 "Search button clicked" 和 "Performing search"<br>
+                • 結果區域會顯示相應的內容<br>
+                • Enter 鍵也能觸發搜尋
+            </div>
+        </div>
+        
+        <div class="test-item">
+            <h3>4. 設計要點浮動面板測試</h3>
+            <div class="test-steps">
+                <strong>步驟：</strong><br>
+                1. 切換到 "混合式智慧搜尋" 模式<br>
+                2. 查看右下角是否出現燈泡按鈕 💡<br>
+                3. 點擊燈泡按鈕<br>
+                4. 切換到 "對話式法規諮詢" 模式<br>
+                5. 再次點擊燈泡按鈕<br>
+                6. 嘗試點擊 ✕ 按鈕或背景關閉面板
+            </div>
+            <div class="expected">
+                <strong>預期結果：</strong><br>
+                • 只有在混合式和對話式模式下才會顯示燈泡按鈕<br>
+                • 點擊燈泡會從右側滑出設計要點面板<br>
+                • 不同模式下面板內容會不同<br>
+                • 可以正常關閉面板<br>
+                • Console 中會顯示相應的點擊事件
+            </div>
+        </div>
+        
+        <div class="test-item">
+            <h3>5. 多模態內容測試</h3>
+            <div class="test-steps">
+                <strong>步驟：</strong><br>
+                1. 在對話式搜尋中點擊預設的問題按鈕<br>
+                2. 嘗試點擊多模態內容中的標籤 (法規概覽、流程圖解等)<br>
+                3. 測試互動式卡片和按鈕<br>
+                4. 嘗試點擊後續問題
+            </div>
+            <div class="expected">
+                <strong>預期結果：</strong><br>
+                • 問題按鈕能正確觸發回應<br>
+                • 標籤切換正常工作<br>
+                • 卡片有 hover 效果<br>
+                • 對話歷史正確更新
+            </div>
+        </div>
+        
+        <div class="test-item">
+            <h3>6. 響應式設計測試</h3>
+            <div class="test-steps">
+                <strong>步驟：</strong><br>
+                1. 按 F12 開啟開發者工具<br>
+                2. 點擊設備模擬按鈕 📱<br>
+                3. 選擇不同的設備尺寸進行測試<br>
+                4. 測試各項功能在行動裝置上的表現
+            </div>
+            <div class="expected">
+                <strong>預期結果：</strong><br>
+                • 在小屏幕上佈局會自動調整<br>
+                • 設計要點面板在行動裝置上會佔滿全寬<br>
+                • 所有按鈕都能正常點擊<br>
+                • 文字和圖示清晰可見
+            </div>
+        </div>
+        
+        <h2>🐛 如果發現問題</h2>
+        
+        <div style="background: #fff3cd; border: 1px solid #ffeaa7; padding: 15px; border-radius: 5px;">
+            <strong>除錯步驟：</strong><br>
+            1. 開啟 <a href="/interact-test.html">互動測試頁面</a> 進行詳細除錯<br>
+            2. 檢查 Console 中的錯誤訊息<br>
+            3. 嘗試重新整理頁面<br>
+            4. 確認網路連線正常<br>
+            5. 嘗試不同的瀏覽器
+        </div>
+        
+        <h2>✅ 測試完成</h2>
+        
+        <div style="background: #d4edda; border: 1px solid #c3e6cb; padding: 15px; border-radius: 5px; margin: 20px 0;">
+            如果所有測試都通過，恭喜您！AI 法規領航員應用程式已經完全可以正常使用了。<br><br>
+            
+            <strong>主要功能確認：</strong><br>
+            ✅ 三種搜尋模式切換<br>
+            ✅ 搜尋功能正常運作<br>
+            ✅ 設計要點面板顯示<br>
+            ✅ 多模態內容互動<br>
+            ✅ 響應式設計適配
+        </div>
+        
+        <div style="text-align: center; margin: 30px 0;">
+            <a href="/" class="link-button">🎯 返回主應用程式</a>
+        </div>
+    </div>
+    
+    <script>
+        // 簡單的頁面載入時間統計
+        const startTime = performance.now();
+        
+        window.addEventListener('load', () => {
+            const loadTime = performance.now() - startTime;
+            console.log(`測試指南頁面載入時間: ${Math.round(loadTime)}ms`);
+        });
+    </script>
+</body>
+</html>
