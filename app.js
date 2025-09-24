@@ -16,8 +16,13 @@ class AIRegulationNavigator {
 
     setupModeSelector() {
         const modeButtons = document.querySelectorAll('.mode-btn');
-        modeButtons.forEach(btn => {
+        console.log(`Found ${modeButtons.length} mode buttons`);
+        
+        modeButtons.forEach((btn, index) => {
+            console.log(`Binding mode button ${index}: ${btn.dataset.mode}`);
             btn.addEventListener('click', () => {
+                console.log(`Mode button clicked: ${btn.dataset.mode}`);
+                
                 // Remove active class from all buttons
                 modeButtons.forEach(b => b.classList.remove('active'));
                 // Add active class to clicked button
@@ -28,16 +33,56 @@ class AIRegulationNavigator {
                 this.switchMode();
             });
         });
+        
+        // Also use event delegation
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('mode-btn')) {
+                console.log('Mode button clicked via delegation:', e.target.dataset.mode);
+            }
+        });
     }
 
     setupSearchHandlers() {
-        document.querySelectorAll('.search-btn').forEach(btn => {
-            btn.addEventListener('click', () => this.handleSearch());
+        // Use event delegation to handle dynamically created elements
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('search-btn') || e.target.closest('.search-btn')) {
+                console.log('Search button clicked');
+                e.preventDefault();
+                this.handleSearch();
+            }
         });
 
-        document.querySelectorAll('.search-input').forEach(input => {
+        document.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && (e.target.classList.contains('search-input') || e.target.closest('.search-input'))) {
+                console.log('Enter pressed in search input');
+                e.preventDefault();
+                this.handleSearch();
+            }
+        });
+
+        // Also bind to existing elements for immediate availability
+        const searchButtons = document.querySelectorAll('.search-btn');
+        const searchInputs = document.querySelectorAll('.search-input');
+        
+        console.log(`Found ${searchButtons.length} search buttons and ${searchInputs.length} search inputs`);
+        
+        searchButtons.forEach((btn, index) => {
+            console.log(`Binding search button ${index}`);
+            btn.addEventListener('click', (e) => {
+                console.log('Direct search button click');
+                e.preventDefault();
+                this.handleSearch();
+            });
+        });
+
+        searchInputs.forEach((input, index) => {
+            console.log(`Binding search input ${index}`);
             input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') this.handleSearch();
+                if (e.key === 'Enter') {
+                    console.log('Direct search input enter');
+                    e.preventDefault();
+                    this.handleSearch();
+                }
             });
         });
     }
