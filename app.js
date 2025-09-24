@@ -65,9 +65,20 @@ class AIRegulationNavigator {
 
     handleSearch() {
         const activeInput = document.querySelector(`#${this.currentMode}-mode .search-input`);
+        
+        if (!activeInput) {
+            console.error('No active input found for mode:', this.currentMode);
+            return;
+        }
+        
         const query = activeInput.value.trim();
         
-        if (!query) return;
+        if (!query) {
+            console.warn('Empty query, ignoring search');
+            return;
+        }
+
+        console.log('Performing search:', { mode: this.currentMode, query });
 
         switch (this.currentMode) {
             case 'traditional':
@@ -79,6 +90,8 @@ class AIRegulationNavigator {
             case 'conversational':
                 this.performConversationalSearch(query);
                 break;
+            default:
+                console.error('Unknown search mode:', this.currentMode);
         }
     }
 
@@ -94,6 +107,11 @@ class AIRegulationNavigator {
                 this.initializeConversation();
                 break;
         }
+        
+        // Ensure insights trigger is properly set up after content load
+        setTimeout(() => {
+            this.updateInsightsTrigger();
+        }, 100);
     }
 
     performTraditionalSearch(query) {
@@ -241,20 +259,28 @@ class AIRegulationNavigator {
         const overlay = document.getElementById('design-overlay');
         const closeBtn = document.getElementById('close-insights');
 
+        if (!trigger || !panel || !overlay || !closeBtn) {
+            console.error('Design insights elements not found');
+            return;
+        }
+
         // Show/hide trigger based on current mode
         this.updateInsightsTrigger();
 
         // Open insights panel
         trigger.addEventListener('click', () => {
+            console.log('Insights trigger clicked');
             this.openInsightsPanel();
         });
 
         // Close insights panel
         closeBtn.addEventListener('click', () => {
+            console.log('Closing insights panel');
             this.closeInsightsPanel();
         });
 
         overlay.addEventListener('click', () => {
+            console.log('Overlay clicked, closing insights');
             this.closeInsightsPanel();
         });
 
@@ -267,10 +293,19 @@ class AIRegulationNavigator {
     updateInsightsTrigger() {
         const trigger = document.getElementById('insights-trigger');
         
+        if (!trigger) {
+            console.error('Insights trigger element not found');
+            return;
+        }
+        
+        console.log('Updating insights trigger for mode:', this.currentMode);
+        
         if (this.currentMode === 'hybrid' || this.currentMode === 'conversational') {
             trigger.classList.add('visible');
+            console.log('Insights trigger should be visible');
         } else {
             trigger.classList.remove('visible');
+            console.log('Insights trigger should be hidden');
         }
     }
 
@@ -991,9 +1026,7 @@ class AIRegulationNavigator {
                     "可以邊開發邊申請認證嗎？",
                     "有推薦的認證顧問公司嗎？"
                 ]
-            }
-        };
-
+            },
             "如何評估 AI 系統的風險等級？": {
                 message: `
                     <p>AI 系統風險等級評估是合規的第一步，讓我為您詳細說明評估標準：</p>
