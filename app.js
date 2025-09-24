@@ -10,6 +10,7 @@ class AIRegulationNavigator {
     init() {
         this.setupModeSelector();
         this.setupSearchHandlers();
+        this.setupDesignInsights();
         this.loadDefaultContent();
     }
 
@@ -52,6 +53,12 @@ class AIRegulationNavigator {
         if (currentModeElement) {
             currentModeElement.classList.remove('hidden');
         }
+
+        // Dispatch mode change event
+        document.dispatchEvent(new CustomEvent('modeChanged', { detail: { mode: this.currentMode } }));
+
+        // Update insights trigger visibility
+        this.updateInsightsTrigger();
 
         this.loadDefaultContent();
     }
@@ -226,6 +233,218 @@ class AIRegulationNavigator {
         }
 
         this.renderConversation();
+    }
+
+    setupDesignInsights() {
+        const trigger = document.getElementById('insights-trigger');
+        const panel = document.getElementById('insights-panel');
+        const overlay = document.getElementById('design-overlay');
+        const closeBtn = document.getElementById('close-insights');
+
+        // Show/hide trigger based on current mode
+        this.updateInsightsTrigger();
+
+        // Open insights panel
+        trigger.addEventListener('click', () => {
+            this.openInsightsPanel();
+        });
+
+        // Close insights panel
+        closeBtn.addEventListener('click', () => {
+            this.closeInsightsPanel();
+        });
+
+        overlay.addEventListener('click', () => {
+            this.closeInsightsPanel();
+        });
+
+        // Update insights when mode changes
+        document.addEventListener('modeChanged', () => {
+            this.updateInsightsTrigger();
+        });
+    }
+
+    updateInsightsTrigger() {
+        const trigger = document.getElementById('insights-trigger');
+        
+        if (this.currentMode === 'hybrid' || this.currentMode === 'conversational') {
+            trigger.classList.add('visible');
+        } else {
+            trigger.classList.remove('visible');
+        }
+    }
+
+    openInsightsPanel() {
+        const panel = document.getElementById('insights-panel');
+        const overlay = document.getElementById('design-overlay');
+        const title = document.getElementById('insights-title');
+        const subtitle = document.getElementById('insights-subtitle');
+        const content = document.getElementById('insights-content');
+
+        // Update content based on current mode
+        if (this.currentMode === 'hybrid') {
+            title.textContent = '混合式智慧搜尋設計理念';
+            subtitle.textContent = 'AI 理解 + 傳統搜尋的完美融合';
+            content.innerHTML = this.getHybridInsightsContent();
+        } else if (this.currentMode === 'conversational') {
+            title.textContent = '對話式搜尋設計理念';
+            subtitle.textContent = '自然互動，智慧引導的全新體驗';
+            content.innerHTML = this.getConversationalInsightsContent();
+        }
+
+        // Show panel and overlay
+        overlay.classList.add('visible');
+        panel.classList.add('open');
+        document.body.style.overflow = 'hidden';
+    }
+
+    closeInsightsPanel() {
+        const panel = document.getElementById('insights-panel');
+        const overlay = document.getElementById('design-overlay');
+
+        overlay.classList.remove('visible');
+        panel.classList.remove('open');
+        document.body.style.overflow = '';
+    }
+
+    getHybridInsightsContent() {
+        return `
+            <div class="insight-section">
+                <div class="insight-header">
+                    <div class="insight-icon cost-reduction">💰</div>
+                    <h4>認知成本降低</h4>
+                </div>
+                <div class="insight-body">
+                    <p class="insight-description">
+                        傳統搜尋讓用戶承擔過多認知負擔，混合式搜尋通過 AI 理解大幅降低各項成本。
+                    </p>
+                    <div class="cost-breakdown">
+                        <div class="cost-item">
+                            <div class="cost-arrow">↓</div>
+                            <div class="cost-content">
+                                <h5>查詢構思成本</h5>
+                                <p class="cost-problem">解決「不知道該搜什麼」的困擾</p>
+                            </div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-arrow">↓</div>
+                            <div class="cost-content">
+                                <h5>結果篩選成本</h5>
+                                <p class="cost-problem">解決「結果太多，不知從何開始」</p>
+                            </div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-arrow">↓</div>
+                            <div class="cost-content">
+                                <h5>資訊整合成本</h5>
+                                <p class="cost-problem">解決「資訊太分散，難以理解」</p>
+                            </div>
+                        </div>
+                        <div class="cost-item">
+                            <div class="cost-arrow">↓</div>
+                            <div class="cost-content">
+                                <h5>驗證成本</h5>
+                                <p class="cost-problem">解決「找到的不是我要的」</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-section">
+                <div class="insight-header">
+                    <div class="insight-icon personalization">🎯</div>
+                    <h4>個人化智慧理解</h4>
+                </div>
+                <div class="insight-body">
+                    <p class="insight-description">
+                        AI 能夠理解用戶的角色、行業背景和具體需求，提供量身定制的解答。
+                    </p>
+                    <div class="insight-benefit">
+                        <strong>價值體現：</strong>從「一體適用」轉向「個人化精準」，大幅提升信息的相關性和實用性。
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-section">
+                <div class="insight-header">
+                    <div class="insight-icon integration">🔄</div>
+                    <h4>智慧與傳統的平衡</h4>
+                </div>
+                <div class="insight-body">
+                    <p class="insight-description">
+                        保留傳統搜尋的深度探索能力，同時提供 AI 的智慧整理和引導。
+                    </p>
+                    <div class="insight-benefit">
+                        <strong>設計哲學：</strong>不是取代傳統搜尋，而是在需要時提供更智慧的起點和導航。
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    getConversationalInsightsContent() {
+        return `
+            <div class="insight-section">
+                <div class="insight-header">
+                    <div class="insight-icon conversation">💬</div>
+                    <h4>對話式、多輪查詢</h4>
+                </div>
+                <div class="insight-body">
+                    <p class="insight-description">
+                        用戶希望能夠使用自然語言提問，並與系統進行連續、漸進式的多輪對話，而非每次重新開始。
+                    </p>
+                    <div class="insight-benefit">
+                        <strong>核心價值：</strong>模擬人與專家顧問的自然對話模式，讓複雜諮詢變得輕鬆直觀。
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-section">
+                <div class="insight-header">
+                    <div class="insight-icon personalization">📊</div>
+                    <h4>個人化、即時洞察</h4>
+                </div>
+                <div class="insight-body">
+                    <p class="insight-description">
+                        不僅要提供搜尋結果，更要提供即時分析和個人化見解，幫助用戶快速做出決策。
+                    </p>
+                    <div class="insight-benefit">
+                        <strong>智慧升級：</strong>從「資訊檢索」進化為「智慧諮詢」，主動提供決策支援。
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-section">
+                <div class="insight-header">
+                    <div class="insight-icon integration">🧠</div>
+                    <h4>動態澄清與多源整合</h4>
+                </div>
+                <div class="insight-body">
+                    <p class="insight-description">
+                        智慧搜尋系統應能主動提出澄清問題，並自動整合多個來源的資訊，提供更全面的回覆。
+                    </p>
+                    <div class="insight-benefit">
+                        <strong>互動智慧：</strong>系統會主動引導用戶深入探索，發現用戶可能沒想到的重要問題。
+                    </div>
+                </div>
+            </div>
+
+            <div class="insight-section">
+                <div class="insight-header">
+                    <div class="insight-icon cost-reduction">🎨</div>
+                    <h4>多模態內容呈現</h4>
+                </div>
+                <div class="insight-body">
+                    <p class="insight-description">
+                        結合文字、圖表、影片、互動元素等多種媒體形式，讓複雜的法規資訊更易理解和消化。
+                    </p>
+                    <div class="insight-benefit">
+                        <strong>體驗創新：</strong>打破純文字限制，用視覺化和互動設計降低理解門檻。
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     setupMultimodalTabs() {

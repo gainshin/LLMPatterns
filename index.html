@@ -1023,6 +1023,223 @@
             gap: 5px;
         }
 
+        /* Floating Design Insights Styles */
+        .design-insights-trigger {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+            z-index: 1000;
+            display: none;
+        }
+
+        .design-insights-trigger:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .design-insights-trigger.visible {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .design-insights-panel {
+            position: fixed;
+            top: 0;
+            right: -400px;
+            width: 380px;
+            height: 100vh;
+            background: white;
+            box-shadow: -5px 0 25px rgba(0, 0, 0, 0.15);
+            z-index: 1001;
+            transition: right 0.4s ease;
+            overflow-y: auto;
+        }
+
+        .design-insights-panel.open {
+            right: 0;
+        }
+
+        .insights-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .insights-header h3 {
+            margin: 0 0 5px 0;
+            font-size: 1.3rem;
+        }
+
+        .insights-header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 0.9rem;
+        }
+
+        .close-insights {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .close-insights:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .insights-content {
+            padding: 20px;
+        }
+
+        .insight-section {
+            margin-bottom: 25px;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid #e0e0e0;
+        }
+
+        .insight-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .insight-icon {
+            width: 35px;
+            height: 35px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .insight-icon.conversation {
+            background: #667eea;
+        }
+
+        .insight-icon.personalization {
+            background: #28a745;
+        }
+
+        .insight-icon.integration {
+            background: #ffc107;
+            color: #000;
+        }
+
+        .insight-icon.cost-reduction {
+            background: #dc3545;
+        }
+
+        .insight-body {
+            padding: 15px;
+        }
+
+        .insight-title {
+            font-weight: 600;
+            color: #2d3748;
+            margin: 0 0 8px 0;
+        }
+
+        .insight-description {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 12px;
+        }
+
+        .insight-benefit {
+            background: #e8f4f8;
+            padding: 10px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            color: #0c5460;
+            border-left: 3px solid #17a2b8;
+        }
+
+        .cost-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .cost-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 3px solid #dc3545;
+        }
+
+        .cost-arrow {
+            color: #dc3545;
+            font-weight: bold;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .cost-content h5 {
+            margin: 0 0 4px 0;
+            color: #2d3748;
+            font-size: 0.9rem;
+        }
+
+        .cost-problem {
+            color: #666;
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        .design-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .design-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
         @media (max-width: 768px) {
             .flowchart-container {
                 flex-direction: column;
@@ -1051,6 +1268,19 @@
             
             .tool-links {
                 grid-template-columns: 1fr;
+            }
+
+            .design-insights-panel {
+                width: 100%;
+                right: -100%;
+            }
+
+            .design-insights-trigger {
+                bottom: 20px;
+                right: 20px;
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
             }
         }
     </style>
@@ -1128,6 +1358,25 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Design Insights Floating Components -->
+    <button class="design-insights-trigger" id="insights-trigger">
+        <i class="fas fa-lightbulb"></i>
+    </button>
+
+    <div class="design-overlay" id="design-overlay"></div>
+    
+    <div class="design-insights-panel" id="insights-panel">
+        <div class="insights-header">
+            <h3 id="insights-title">設計理念</h3>
+            <p id="insights-subtitle">了解這個模式的核心價值</p>
+            <button class="close-insights" id="close-insights">×</button>
+        </div>
+        
+        <div class="insights-content" id="insights-content">
+            <!-- Content will be populated by JavaScript -->
         </div>
     </div>
 
