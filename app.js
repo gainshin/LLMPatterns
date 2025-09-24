@@ -228,6 +228,39 @@ class AIRegulationNavigator {
         this.renderConversation();
     }
 
+    setupMultimodalTabs() {
+        // Setup content tabs for multimodal content
+        document.addEventListener('click', (e) => {
+            if (e.target.classList.contains('content-tab')) {
+                const tab = e.target;
+                const contentType = tab.dataset.content;
+                const container = tab.closest('.multimodal-content');
+                
+                // Remove active class from all tabs in this container
+                container.querySelectorAll('.content-tab').forEach(t => t.classList.remove('active'));
+                container.querySelectorAll('.content-panel').forEach(p => p.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                const panel = container.querySelector(`#${contentType}`);
+                if (panel) {
+                    panel.classList.add('active');
+                }
+            }
+        });
+
+        // Setup interactive cards
+        document.addEventListener('click', (e) => {
+            if (e.target.closest('.info-card') || e.target.closest('.media-item') || e.target.closest('.resource-card')) {
+                const card = e.target.closest('.info-card, .media-item, .resource-card');
+                card.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    card.style.transform = '';
+                }, 150);
+            }
+        });
+    }
+
     initializeConversation() {
         const container = document.getElementById('conversation-container');
         container.innerHTML = `
@@ -245,16 +278,16 @@ class AIRegulationNavigator {
                     
                     <div class="follow-up-questions">
                         <button class="question-btn" onclick="navigator.askQuestion('我是一家 AI 新創公司，需要了解相關法規')">
-                            我是一家 AI 新創公司，需要了解相關法規
+                            🚀 我是一家 AI 新創公司，需要了解相關法規
                         </button>
                         <button class="question-btn" onclick="navigator.askQuestion('我們正在開發醫療 AI 產品，合規要求是什麼？')">
-                            我們正在開發醫療 AI 產品，合規要求是什麼？
+                            🏥 我們正在開發醫療 AI 產品，合規要求是什麼？
                         </button>
                         <button class="question-btn" onclick="navigator.askQuestion('如何評估 AI 系統的風險等級？')">
-                            如何評估 AI 系統的風險等級？
+                            🎯 如何評估 AI 系統的風險等級？
                         </button>
                         <button class="question-btn" onclick="navigator.askQuestion('我需要申請什麼認證或許可？')">
-                            我需要申請什麼認證或許可？
+                            📋 我需要申請什麼認證或許可？
                         </button>
                     </div>
                 </div>
@@ -308,6 +341,11 @@ class AIRegulationNavigator {
         }).join('');
 
         container.innerHTML = conversationHTML;
+        
+        // Setup multimodal content after rendering
+        setTimeout(() => {
+            this.setupMultimodalTabs();
+        }, 100);
         
         // Scroll to bottom
         container.scrollTop = container.scrollHeight;
@@ -458,7 +496,7 @@ class AIRegulationNavigator {
     }
 
     generateAIResponse(query) {
-        // Simulate contextual AI responses
+        // Simulate contextual AI responses with multimodal content
         const responses = {
             "我是一家 AI 新創公司，需要了解相關法規": {
                 message: `
@@ -471,6 +509,92 @@ class AIRegulationNavigator {
                             <li><strong>個資法：</strong>數據處理與隱私保護</li>
                             <li><strong>行業特定法規：</strong>根據應用領域而定</li>
                         </ul>
+                    </div>
+
+                    <div class="multimodal-content">
+                        <div class="content-tabs">
+                            <button class="content-tab active" data-content="overview">法規概覽</button>
+                            <button class="content-tab" data-content="flowchart">流程圖解</button>
+                            <button class="content-tab" data-content="examples">案例分析</button>
+                        </div>
+                        
+                        <div class="content-panel active" id="overview">
+                            <div class="info-grid">
+                                <div class="info-card">
+                                    <div class="info-icon">📋</div>
+                                    <h4>法規檢查清單</h4>
+                                    <p>完整的合規檢核項目</p>
+                                    <small>12 項必備文件</small>
+                                </div>
+                                <div class="info-card">
+                                    <div class="info-icon">🎯</div>
+                                    <h4>風險評估工具</h4>
+                                    <p>AI 系統風險等級判定</p>
+                                    <small>線上評估系統</small>
+                                </div>
+                                <div class="info-card">
+                                    <div class="info-icon">💰</div>
+                                    <h4>補助資源</h4>
+                                    <p>政府補助計畫整理</p>
+                                    <small>最高 500 萬補助</small>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="content-panel" id="flowchart">
+                            <div class="flowchart-container">
+                                <div class="flow-step">
+                                    <div class="step-number">1</div>
+                                    <div class="step-content">
+                                        <h4>風險評估</h4>
+                                        <p>確定 AI 系統風險等級</p>
+                                    </div>
+                                </div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-step">
+                                    <div class="step-number">2</div>
+                                    <div class="step-content">
+                                        <h4>準備文件</h4>
+                                        <p>建立技術文件與管理制度</p>
+                                    </div>
+                                </div>
+                                <div class="flow-arrow">→</div>
+                                <div class="flow-step">
+                                    <div class="step-number">3</div>
+                                    <div class="step-content">
+                                        <h4>申請認證</h4>
+                                        <p>提交認證申請並接受審查</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="content-panel" id="examples">
+                            <div class="example-cases">
+                                <div class="case-card">
+                                    <div class="case-header">
+                                        <span class="case-tag success">成功案例</span>
+                                        <h4>智慧客服系統</h4>
+                                    </div>
+                                    <p>某新創公司的 AI 客服系統成功通過認證，從申請到核准僅花費 8 個月。</p>
+                                    <div class="case-metrics">
+                                        <span>⏱️ 8個月</span>
+                                        <span>💰 節省50%成本</span>
+                                    </div>
+                                </div>
+                                <div class="case-card">
+                                    <div class="case-header">
+                                        <span class="case-tag warning">注意事項</span>
+                                        <h4>醫療影像AI</h4>
+                                    </div>
+                                    <p>醫療領域 AI 需要額外的臨床驗證，建議預留 18-24 個月的認證時間。</p>
+                                    <div class="case-metrics">
+                                        <span>⏱️ 18-24個月</span>
+                                        <span>📊 需臨床試驗</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <p><strong>💡 新創友善措施：</strong></p>
@@ -500,15 +624,144 @@ class AIRegulationNavigator {
                         </ol>
                     </div>
 
-                    <div style="background: #d1ecf1; padding: 15px; border-radius: 8px; margin: 15px 0;">
-                        <h4>📋 合規檢查清單</h4>
-                        <ul style="margin: 10px 0; padding-left: 20px;">
-                            <li>✅ 演算法透明度文件</li>
-                            <li>✅ 臨床驗證報告</li>
-                            <li>✅ 風險管理檔案</li>
-                            <li>✅ 品質管理系統 (ISO 13485)</li>
-                            <li>✅ 網路安全評估</li>
-                        </ul>
+                    <div class="multimodal-content">
+                        <div class="content-tabs">
+                            <button class="content-tab active" data-content="requirements">認證要求</button>
+                            <button class="content-tab" data-content="timeline">時程規劃</button>
+                            <button class="content-tab" data-content="resources">實用資源</button>
+                        </div>
+                        
+                        <div class="content-panel active" id="requirements">
+                            <div class="requirement-checklist">
+                                <div class="checklist-item">
+                                    <div class="check-icon">✅</div>
+                                    <div class="check-content">
+                                        <h4>演算法透明度文件</h4>
+                                        <p>詳細說明 AI 模型架構、訓練數據、決策邏輯</p>
+                                        <div class="requirement-media">
+                                            <div class="media-item">
+                                                <span class="media-icon">📄</span>
+                                                <span>技術規格書範本</span>
+                                            </div>
+                                            <div class="media-item">
+                                                <span class="media-icon">🎥</span>
+                                                <span>填寫教學影片</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="checklist-item">
+                                    <div class="check-icon">✅</div>
+                                    <div class="check-content">
+                                        <h4>臨床驗證報告</h4>
+                                        <p>證明 AI 系統在真實醫療環境中的有效性和安全性</p>
+                                        <div class="requirement-media">
+                                            <div class="media-item">
+                                                <span class="media-icon">📊</span>
+                                                <span>驗證數據範例</span>
+                                            </div>
+                                            <div class="media-item">
+                                                <span class="media-icon">🏥</span>
+                                                <span>合作醫院清單</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="checklist-item">
+                                    <div class="check-icon">✅</div>
+                                    <div class="check-content">
+                                        <h4>品質管理系統 (ISO 13485)</h4>
+                                        <p>建立符合醫療器材品質標準的管理制度</p>
+                                        <div class="requirement-media">
+                                            <div class="media-item">
+                                                <span class="media-icon">📋</span>
+                                                <span>ISO 13485 指南</span>
+                                            </div>
+                                            <div class="media-item">
+                                                <span class="media-icon">🎓</span>
+                                                <span>線上課程推薦</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="content-panel" id="timeline">
+                            <div class="timeline-visual">
+                                <div class="timeline-item">
+                                    <div class="timeline-marker start">開始</div>
+                                    <div class="timeline-content">
+                                        <h4>準備階段 (3-6個月)</h4>
+                                        <ul>
+                                            <li>技術文件準備</li>
+                                            <li>品質制度建立</li>
+                                            <li>合作醫院洽談</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-item">
+                                    <div class="timeline-marker process">進行中</div>
+                                    <div class="timeline-content">
+                                        <h4>臨床驗證 (6-12個月)</h4>
+                                        <ul>
+                                            <li>IRB 倫理審查</li>
+                                            <li>臨床試驗執行</li>
+                                            <li>數據收集分析</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                
+                                <div class="timeline-item">
+                                    <div class="timeline-marker end">完成</div>
+                                    <div class="timeline-content">
+                                        <h4>認證申請 (6-9個月)</h4>
+                                        <ul>
+                                            <li>文件送審</li>
+                                            <li>現場查核</li>
+                                            <li>許可證核發</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="content-panel" id="resources">
+                            <div class="resource-grid">
+                                <div class="resource-card">
+                                    <div class="resource-icon">🏛️</div>
+                                    <h4>衛福部食藥署</h4>
+                                    <p>醫療器材認證主管機關</p>
+                                    <div class="resource-links">
+                                        <a href="#" class="resource-link">📞 諮詢專線</a>
+                                        <a href="#" class="resource-link">📧 線上申請</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-card">
+                                    <div class="resource-icon">🏥</div>
+                                    <h4>臨床試驗網路</h4>
+                                    <p>配合醫院與研究機構</p>
+                                    <div class="resource-links">
+                                        <a href="#" class="resource-link">🔍 醫院查詢</a>
+                                        <a href="#" class="resource-link">📋 合作流程</a>
+                                    </div>
+                                </div>
+                                
+                                <div class="resource-card">
+                                    <div class="resource-icon">💰</div>
+                                    <h4>補助計畫</h4>
+                                    <p>政府與民間資金支援</p>
+                                    <div class="resource-links">
+                                        <a href="#" class="resource-link">💵 SBIR 計畫</a>
+                                        <a href="#" class="resource-link">🏆 創新獎勵</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <p><strong>⏰ 建議時程：</strong>整體認證流程約需 18-24 個月</p>
@@ -518,6 +771,240 @@ class AIRegulationNavigator {
                     "ISO 13485 認證如何申請？",
                     "可以邊開發邊申請認證嗎？",
                     "有推薦的認證顧問公司嗎？"
+                ]
+            }
+        };
+
+            "如何評估 AI 系統的風險等級？": {
+                message: `
+                    <p>AI 系統風險等級評估是合規的第一步，讓我為您詳細說明評估標準：</p>
+                    
+                    <div class="multimodal-content">
+                        <div class="content-tabs">
+                            <button class="content-tab active" data-content="risk-matrix">風險矩陣</button>
+                            <button class="content-tab" data-content="evaluation-tool">評估工具</button>
+                            <button class="content-tab" data-content="examples">應用實例</button>
+                        </div>
+                        
+                        <div class="content-panel active" id="risk-matrix">
+                            <div class="risk-assessment">
+                                <h4>🎯 風險評估維度</h4>
+                                <div class="info-grid">
+                                    <div class="info-card high-risk">
+                                        <div class="info-icon">🚨</div>
+                                        <h4>高風險應用</h4>
+                                        <p>醫療、金融、交通安全</p>
+                                        <div class="risk-examples">
+                                            <span>💊 醫療診斷</span>
+                                            <span>🚗 自動駕駛</span>
+                                            <span>💰 信貸審核</span>
+                                        </div>
+                                    </div>
+                                    <div class="info-card medium-risk">
+                                        <div class="info-icon">⚠️</div>
+                                        <h4>中風險應用</h4>
+                                        <p>教育、人力資源管理</p>
+                                        <div class="risk-examples">
+                                            <span>📚 智慧教學</span>
+                                            <span>👥 履歷篩選</span>
+                                            <span>🎯 個人推薦</span>
+                                        </div>
+                                    </div>
+                                    <div class="info-card low-risk">
+                                        <div class="info-icon">✅</div>
+                                        <h4>低風險應用</h4>
+                                        <p>娛樂、一般商業應用</p>
+                                        <div class="risk-examples">
+                                            <span>🎮 遊戲 AI</span>
+                                            <span>🛒 商品推薦</span>
+                                            <span>💬 聊天機器人</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="content-panel" id="evaluation-tool">
+                            <div class="evaluation-steps">
+                                <h4>📋 自我評估步驟</h4>
+                                <div class="step-by-step">
+                                    <div class="eval-step">
+                                        <div class="step-header">
+                                            <span class="step-num">1</span>
+                                            <h4>應用領域識別</h4>
+                                        </div>
+                                        <div class="step-content">
+                                            <p>確認您的 AI 系統應用在哪個領域</p>
+                                            <div class="interactive-checklist">
+                                                <label><input type="checkbox"> 醫療保健</label>
+                                                <label><input type="checkbox"> 金融服務</label>
+                                                <label><input type="checkbox"> 交通運輸</label>
+                                                <label><input type="checkbox"> 教育培訓</label>
+                                                <label><input type="checkbox"> 其他領域</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="eval-step">
+                                        <div class="step-header">
+                                            <span class="step-num">2</span>
+                                            <h4>影響範圍評估</h4>
+                                        </div>
+                                        <div class="step-content">
+                                            <p>評估 AI 決策對使用者的影響程度</p>
+                                            <div class="impact-scale">
+                                                <div class="scale-item">
+                                                    <span class="scale-dot high"></span>
+                                                    <span>重大影響 (生命安全)</span>
+                                                </div>
+                                                <div class="scale-item">
+                                                    <span class="scale-dot medium"></span>
+                                                    <span>中等影響 (權益相關)</span>
+                                                </div>
+                                                <div class="scale-item">
+                                                    <span class="scale-dot low"></span>
+                                                    <span>輕微影響 (便利性)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="eval-step">
+                                        <div class="step-header">
+                                            <span class="step-num">3</span>
+                                            <h4>技術特徵分析</h4>
+                                        </div>
+                                        <div class="step-content">
+                                            <p>分析 AI 系統的技術複雜度</p>
+                                            <div class="tech-features">
+                                                <div class="feature-item">
+                                                    <span class="feature-icon">🧠</span>
+                                                    <div>
+                                                        <h5>深度學習模型</h5>
+                                                        <p>複雜的神經網路架構</p>
+                                                    </div>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-icon">🔄</span>
+                                                    <div>
+                                                        <h5>自主學習能力</h5>
+                                                        <p>持續學習與更新</p>
+                                                    </div>
+                                                </div>
+                                                <div class="feature-item">
+                                                    <span class="feature-icon">🎯</span>
+                                                    <div>
+                                                        <h5>決策透明度</h5>
+                                                        <p>可解釋性程度</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="assessment-result">
+                                    <div class="result-box">
+                                        <h4>🎯 評估工具推薦</h4>
+                                        <div class="tool-links">
+                                            <a href="#" class="tool-link">
+                                                <span class="link-icon">🔧</span>
+                                                <div>
+                                                    <h5>線上風險評估器</h5>
+                                                    <p>5 分鐘快速評估</p>
+                                                </div>
+                                            </a>
+                                            <a href="#" class="tool-link">
+                                                <span class="link-icon">📊</span>
+                                                <div>
+                                                    <h5>詳細評估報告</h5>
+                                                    <p>專業評估服務</p>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="content-panel" id="examples">
+                            <div class="example-gallery">
+                                <h4>📱 應用實例分析</h4>
+                                <div class="example-grid">
+                                    <div class="example-card high-risk">
+                                        <div class="example-media">
+                                            <div class="media-placeholder">
+                                                <span class="media-icon">🏥</span>
+                                                <div class="play-button">▶️</div>
+                                            </div>
+                                            <span class="media-label">案例影片：醫療 AI</span>
+                                        </div>
+                                        <div class="example-content">
+                                            <h4>智慧醫療影像辨識</h4>
+                                            <div class="risk-badge high">高風險</div>
+                                            <p>用於癌症篩檢的 AI 系統，直接影響診斷結果</p>
+                                            <div class="example-details">
+                                                <span>🎯 風險因子：生命安全</span>
+                                                <span>📋 認證需求：FDA + CE + TFDA</span>
+                                                <span>⏰ 認證時程：18-24 個月</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="example-card medium-risk">
+                                        <div class="example-media">
+                                            <div class="media-placeholder">
+                                                <span class="media-icon">👥</span>
+                                                <div class="view-button">👁️</div>
+                                            </div>
+                                            <span class="media-label">圖解：HR AI 流程</span>
+                                        </div>
+                                        <div class="example-content">
+                                            <h4>人力資源管理 AI</h4>
+                                            <div class="risk-badge medium">中風險</div>
+                                            <p>履歷篩選與面試評估系統</p>
+                                            <div class="example-details">
+                                                <span>🎯 風險因子：就業公平</span>
+                                                <span>📋 認證需求：偏見檢測</span>
+                                                <span>⏰ 認證時程：6-12 個月</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="example-card low-risk">
+                                        <div class="example-media">
+                                            <div class="media-placeholder">
+                                                <span class="media-icon">🎮</span>
+                                                <div class="demo-button">🎲</div>
+                                            </div>
+                                            <span class="media-label">互動示範：遊戲 AI</span>
+                                        </div>
+                                        <div class="example-content">
+                                            <h4>遊戲智能對手</h4>
+                                            <div class="risk-badge low">低風險</div>
+                                            <p>遊戲中的 AI 角色與策略系統</p>
+                                            <div class="example-details">
+                                                <span>🎯 風險因子：娛樂體驗</span>
+                                                <span>📋 認證需求：無特殊要求</span>
+                                                <span>⏰ 認證時程：自主聲明</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="background: #e8f4f8; padding: 15px; border-radius: 8px; margin: 15px 0;">
+                        <h4>💡 專家建議</h4>
+                        <p>建議在產品開發初期就進行風險評估，避免後期大幅修改。如果評估結果為高風險，建議及早諮詢專業法規顧問。</p>
+                    </div>
+                `,
+                followUp: [
+                    "我的產品被評為高風險，下一步該怎麼做？",
+                    "風險等級可以降低嗎？",
+                    "中風險和高風險的認證差別在哪？",
+                    "評估報告需要第三方認證嗎？"
                 ]
             }
         };
