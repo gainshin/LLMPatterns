@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug Test</title>
+</head>
+<body>
+    <h1>Debug Test Page</h1>
+    <button onclick="testClick()">Test Click</button>
+    <div id="output"></div>
+    
+    <script>
+        console.log('Test script loaded');
+        
+        function testClick() {
+            console.log('Button clicked!');
+            document.getElementById('output').innerHTML = 'Button works!';
+        }
+        
+        // Test if main app loads
+        try {
+            fetch('/app.js')
+                .then(response => {
+                    console.log('app.js fetch status:', response.status);
+                    return response.text();
+                })
+                .then(text => {
+                    console.log('app.js length:', text.length);
+                    console.log('First 200 chars:', text.substring(0, 200));
+                })
+                .catch(error => {
+                    console.error('Error fetching app.js:', error);
+                });
+        } catch (error) {
+            console.error('Error in test:', error);
+        }
+    </script>
+</body>
+</html>

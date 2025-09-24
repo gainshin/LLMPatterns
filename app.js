@@ -1314,8 +1314,24 @@ class AIRegulationNavigator {
     }
 }
 
-// Initialize the application
-const navigator = new AIRegulationNavigator();
+// Initialize the application when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('DOM Content Loaded, initializing navigator');
+    const navigator = new AIRegulationNavigator();
+    
+    // Make askQuestion globally available
+    window.navigator = navigator;
+    
+    console.log('Navigator initialized:', navigator);
+});
 
-// Make askQuestion globally available
-window.navigator = navigator;
+// Fallback initialization if DOMContentLoaded already fired
+if (document.readyState === 'loading') {
+    // Document is still loading, DOMContentLoaded will fire
+    console.log('Document is loading, waiting for DOMContentLoaded');
+} else {
+    // Document has already loaded
+    console.log('Document already loaded, initializing immediately');
+    const navigator = new AIRegulationNavigator();
+    window.navigator = navigator;
+}

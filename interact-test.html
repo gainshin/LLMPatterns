@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>互動測試</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px; font-size: 16px; }
+        #log { background: #f0f0f0; padding: 10px; margin: 10px 0; height: 300px; overflow-y: auto; }
+    </style>
+</head>
+<body>
+    <h1>AI 法規領航員 - 互動測試</h1>
+    
+    <div>
+        <button onclick="testModeSwitch('hybrid')">切換到混合式搜尋</button>
+        <button onclick="testModeSwitch('conversational')">切換到對話式搜尋</button>
+        <button onclick="testSearch()">測試搜尋</button>
+        <button onclick="testInsights()">測試設計要點</button>
+    </div>
+    
+    <div>
+        <input type="text" id="test-query" placeholder="輸入測試查詢" value="我是AI新創公司" style="width: 300px; padding: 8px;">
+        <button onclick="testCustomSearch()">執行自定義搜尋</button>
+    </div>
+    
+    <div id="log"></div>
+    
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `[${timestamp}] ${message}<br>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function testModeSwitch(mode) {
+            log(`嘗試切換到模式: ${mode}`);
+            
+            if (window.navigator) {
+                try {
+                    window.navigator.currentMode = mode;
+                    window.navigator.switchMode();
+                    log(`模式切換成功: ${mode}`);
+                } catch (error) {
+                    log(`模式切換失敗: ${error.message}`);
+                }
+            } else {
+                log('Navigator 未初始化');
+            }
+        }
+        
+        function testSearch() {
+            log('測試搜尋功能');
+            
+            if (window.navigator) {
+                try {
+                    window.navigator.handleSearch();
+                    log('搜尋執行完成');
+                } catch (error) {
+                    log(`搜尋失敗: ${error.message}`);
+                }
+            } else {
+                log('Navigator 未初始化');
+            }
+        }
+        
+        function testCustomSearch() {
+            const query = document.getElementById('test-query').value;
+            log(`執行自定義搜尋: "${query}"`);
+            
+            if (window.navigator) {
+                try {
+                    const mode = window.navigator.currentMode;
+                    
+                    switch (mode) {
+                        case 'traditional':
+                            window.navigator.performTraditionalSearch(query);
+                            break;
+                        case 'hybrid':
+                            window.navigator.performHybridSearch(query);
+                            break;
+                        case 'conversational':
+                            window.navigator.performConversationalSearch(query);
+                            break;
+                    }
+                    
+                    log(`搜尋完成，模式: ${mode}`);
+                } catch (error) {
+                    log(`搜尋失敗: ${error.message}`);
+                }
+            } else {
+                log('Navigator 未初始化');
+            }
+        }
+        
+        function testInsights() {
+            log('測試設計要點功能');
+            
+            if (window.navigator) {
+                try {
+                    window.navigator.openInsightsPanel();
+                    log('設計要點面板開啟');
+                } catch (error) {
+                    log(`設計要點失敗: ${error.message}`);
+                }
+            } else {
+                log('Navigator 未初始化');
+            }
+        }
+        
+        // 監聽頁面載入
+        window.addEventListener('load', () => {
+            log('頁面載入完成');
+            
+            setTimeout(() => {
+                if (window.navigator) {
+                    log(`Navigator 已初始化，當前模式: ${window.navigator.currentMode}`);
+                } else {
+                    log('Navigator 未找到，正在等待...');
+                    
+                    // 等待 navigator 載入
+                    let attempts = 0;
+                    const checkNav = setInterval(() => {
+                        attempts++;
+                        if (window.navigator) {
+                            log(`Navigator 在第 ${attempts} 次檢查時找到`);
+                            clearInterval(checkNav);
+                        } else if (attempts > 10) {
+                            log('Navigator 載入失敗');
+                            clearInterval(checkNav);
+                        }
+                    }, 500);
+                }
+            }, 1000);
+        });
+        
+        log('測試頁面初始化完成');
+    </script>
+</body>
+</html>
