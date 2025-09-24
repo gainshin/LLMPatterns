@@ -175,11 +175,24 @@
         }
 
         .ai-response {
-            background: linear-gradient(135deg, #ffd89b 0%, #19547b 100%);
-            color: white;
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            color: #2d3748;
             border-radius: 15px;
             padding: 25px;
             margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .ai-response h3 {
+            color: #667eea;
+            font-weight: 600;
+            background: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: -5px -5px 15px -5px;
+            border-left: 3px solid #667eea;
         }
 
         .ai-response h3 {
@@ -187,6 +200,16 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            color: #667eea;
+            font-weight: 600;
+        }
+
+        .ai-response p, .ai-response strong {
+            color: #2d3748;
+        }
+
+        .ai-response ul, .ai-response ol {
+            color: #4a5568;
         }
 
         .conversation-flow {

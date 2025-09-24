@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>對話功能測試</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #5a67d8;
+        }
+        #log {
+            background: #f0f0f0;
+            padding: 10px;
+            margin: 10px 0;
+            height: 300px;
+            overflow-y: auto;
+            border-radius: 5px;
+        }
+        .question-btn {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin: 5px 0;
+            padding: 12px 15px;
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid #667eea;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 對話功能專項測試</h1>
+        
+        <div class="test-section">
+            <h3>1. 全局函數測試</h3>
+            <p>測試 askQuestion 全局函數是否正確定義：</p>
+            <button onclick="testGlobalFunction()">檢查全局函數</button>
+            <button onclick="testDirectCall()">直接調用測試</button>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. 模擬對話按鈕</h3>
+            <p>這些按鈕模擬對話式搜尋中的問題按鈕：</p>
+            
+            <button class="question-btn" onclick="askQuestion('我是一家 AI 新創公司，需要了解相關法規')">
+                🚀 我是一家 AI 新創公司，需要了解相關法規
+            </button>
+            
+            <button class="question-btn" onclick="askQuestion('我們正在開發醫療 AI 產品，合規要求是什麼？')">
+                🏥 我們正在開發醫療 AI 產品，合規要求是什麼？
+            </button>
+            
+            <button class="question-btn" onclick="askQuestion('如何評估 AI 系統的風險等級？')">
+                🎯 如何評估 AI 系統的風險等級？
+            </button>
+            
+            <button class="question-btn" onclick="askQuestion('我需要申請什麼認證或許可？')">
+                📋 我需要申請什麼認證或許可？
+            </button>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Navigator 狀態檢查</h3>
+            <button onclick="checkNavigator()">檢查 Navigator 狀態</button>
+            <button onclick="switchToConversational()">切換到對話式模式</button>
+            <button onclick="testSearchInput()">測試搜尋輸入框</button>
+        </div>
+        
+        <div id="log"></div>
+        
+        <div style="margin-top: 20px;">
+            <a href="/" style="display: inline-block; padding: 10px 20px; background: #28a745; color: white; text-decoration: none; border-radius: 5px;">
+                返回主應用程式測試
+            </a>
+        </div>
+    </div>
+    
+    <script>
+        function log(message) {
+            const logDiv = document.getElementById('log');
+            const timestamp = new Date().toLocaleTimeString();
+            logDiv.innerHTML += `<div>[${timestamp}] ${message}</div>`;
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+        
+        function testGlobalFunction() {
+            log('檢查全局函數...');
+            
+            if (typeof askQuestion === 'function') {
+                log('✅ askQuestion 全局函數已定義');
+            } else {
+                log('❌ askQuestion 全局函數未定義');
+            }
+            
+            if (typeof window.askQuestion === 'function') {
+                log('✅ window.askQuestion 已定義');
+            } else {
+                log('❌ window.askQuestion 未定義');
+            }
+            
+            if (window.navigator) {
+                log('✅ window.navigator 已定義');
+                log(`Navigator 當前模式: ${window.navigator.currentMode}`);
+            } else {
+                log('❌ window.navigator 未定義');
+            }
+        }
+        
+        function testDirectCall() {
+            log('嘗試直接調用 askQuestion...');
+            
+            try {
+                if (typeof askQuestion === 'function') {
+                    askQuestion('測試問題');
+                    log('✅ 直接調用成功');
+                } else {
+                    log('❌ askQuestion 函數不存在');
+                }
+            } catch (error) {
+                log(`❌ 直接調用失敗: ${error.message}`);
+            }
+        }
+        
+        function checkNavigator() {
+            log('檢查 Navigator 詳細狀態...');
+            
+            if (window.navigator) {
+                const nav = window.navigator;
+                log(`Navigator 類型: ${nav.constructor.name}`);
+                log(`當前模式: ${nav.currentMode}`);
+                log(`對話歷史長度: ${nav.conversationHistory?.length || 0}`);
+                
+                if (typeof nav.askQuestion === 'function') {
+                    log('✅ navigator.askQuestion 方法存在');
+                } else {
+                    log('❌ navigator.askQuestion 方法不存在');
+                }
+            } else {
+                log('❌ Navigator 未初始化');
+            }
+        }
+        
+        function switchToConversational() {
+            log('嘗試切換到對話式模式...');
+            
+            if (window.navigator) {
+                try {
+                    window.navigator.currentMode = 'conversational';
+                    window.navigator.switchMode();
+                    log('✅ 模式切換完成');
+                } catch (error) {
+                    log(`❌ 模式切換失敗: ${error.message}`);
+                }
+            } else {
+                log('❌ Navigator 未初始化，無法切換模式');
+            }
+        }
+        
+        function testSearchInput() {
+            log('檢查對話式搜尋輸入框...');
+            
+            const input = document.querySelector('#conversational-mode .search-input');
+            if (input) {
+                log('✅ 找到對話式搜尋輸入框');
+                log(`輸入框當前值: "${input.value}"`);
+            } else {
+                log('❌ 未找到對話式搜尋輸入框 - 可能需要先切換到對話式模式');
+            }
+        }
+        
+        // 頁面載入時的初始化
+        window.addEventListener('load', () => {
+            log('對話功能測試頁面載入完成');
+            
+            // 等待一下讓主應用程式初始化
+            setTimeout(() => {
+                testGlobalFunction();
+            }, 1000);
+        });
+        
+        log('對話功能測試頁面初始化...');
+    </script>
+</body>
+</html>

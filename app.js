@@ -576,16 +576,16 @@ class AIRegulationNavigator {
                     <p><strong>請告訴我您的具體情況，我會為您量身定制解答：</strong></p>
                     
                     <div class="follow-up-questions">
-                        <button class="question-btn" onclick="navigator.askQuestion('我是一家 AI 新創公司，需要了解相關法規')">
+                        <button class="question-btn" onclick="askQuestion('我是一家 AI 新創公司，需要了解相關法規')">
                             🚀 我是一家 AI 新創公司，需要了解相關法規
                         </button>
-                        <button class="question-btn" onclick="navigator.askQuestion('我們正在開發醫療 AI 產品，合規要求是什麼？')">
+                        <button class="question-btn" onclick="askQuestion('我們正在開發醫療 AI 產品，合規要求是什麼？')">
                             🏥 我們正在開發醫療 AI 產品，合規要求是什麼？
                         </button>
-                        <button class="question-btn" onclick="navigator.askQuestion('如何評估 AI 系統的風險等級？')">
+                        <button class="question-btn" onclick="askQuestion('如何評估 AI 系統的風險等級？')">
                             🎯 如何評估 AI 系統的風險等級？
                         </button>
-                        <button class="question-btn" onclick="navigator.askQuestion('我需要申請什麼認證或許可？')">
+                        <button class="question-btn" onclick="askQuestion('我需要申請什麼認證或許可？')">
                             📋 我需要申請什麼認證或許可？
                         </button>
                     </div>
@@ -598,7 +598,14 @@ class AIRegulationNavigator {
     }
 
     askQuestion(question) {
+        console.log('askQuestion called with:', question);
         const input = document.querySelector('#conversational-mode .search-input');
+        
+        if (!input) {
+            console.error('Conversational mode input not found');
+            return;
+        }
+        
         input.value = question;
         this.performConversationalSearch(question);
     }
@@ -627,7 +634,7 @@ class AIRegulationNavigator {
                                 <div class="follow-up-questions">
                                     <p><strong>🤔 您可能還想了解：</strong></p>
                                     ${msg.followUp.map(q => `
-                                        <button class="question-btn" onclick="navigator.askQuestion('${q}')">
+                                        <button class="question-btn" onclick="askQuestion('${q}')">
                                             ${q}
                                         </button>
                                     `).join('')}
@@ -1359,15 +1366,31 @@ class AIRegulationNavigator {
     }
 }
 
+// Global navigator instance
+let globalNavigator;
+
+// Global askQuestion function for button clicks
+function askQuestion(question) {
+    console.log('Global askQuestion called:', question);
+    if (globalNavigator) {
+        globalNavigator.askQuestion(question);
+    } else {
+        console.error('Navigator not initialized yet');
+    }
+}
+
+// Make askQuestion globally available immediately
+window.askQuestion = askQuestion;
+
 // Initialize the application when DOM is ready
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM Content Loaded, initializing navigator');
-    const navigator = new AIRegulationNavigator();
+    globalNavigator = new AIRegulationNavigator();
     
-    // Make askQuestion globally available
-    window.navigator = navigator;
+    // Make navigator instance globally available
+    window.navigator = globalNavigator;
     
-    console.log('Navigator initialized:', navigator);
+    console.log('Navigator initialized:', globalNavigator);
 });
 
 // Fallback initialization if DOMContentLoaded already fired
@@ -1377,6 +1400,6 @@ if (document.readyState === 'loading') {
 } else {
     // Document has already loaded
     console.log('Document already loaded, initializing immediately');
-    const navigator = new AIRegulationNavigator();
-    window.navigator = navigator;
+    globalNavigator = new AIRegulationNavigator();
+    window.navigator = globalNavigator;
 }
